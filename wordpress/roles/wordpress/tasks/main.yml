@@ -1,0 +1,38 @@
+- name: copy wordpress package
+  copy: src=wordpress-5.4.2-zh_CN.tar.gz dest=/usr/share/nginx/
+
+- name: tar wordpress
+  shell: tar -zxvf /usr/share/nginx/wordpress-5.4.2-zh_CN.tar.gz -C /usr/share/nginx/
+
+- name: copy wordpress config file
+  copy: src=wp-config.php dest=/usr/share/nginx/wordpress
+
+- name: create wordpress database
+  mysql_db:
+    name: 'root'
+    login_host: 'localhost'
+    login_password: 'admin123'
+    name: 'wordpress'
+    state: present
+
+- mysql_user:
+    user: 'root'
+    login_host: 'localhost'
+    login_password: 'admin123'
+    user: 'wakamizu'
+    password: 'wakamizu'
+    priv: 'wordpress.*:ALL'
+    state: present
+
+
+- name: copy nginx config file
+  copy: src=wordpress.conf dest=/etc/nginx/conf.d/
+
+- name: copy certs
+  copy: src=certs dest=/usr/share/nginx/
+
+- name: give privileges
+  command: chown -R nginx:nginx /usr/share/nginx/
+
+- name: restart nginx
+  service: name=nginx state=restarted

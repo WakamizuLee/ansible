@@ -1,0 +1,9 @@
+---
+- name: install nginx
+  yum: name={{ item.name }} state=present
+  with_items:
+    - { name: 'epel-release' }
+    - { name: 'nginx' }
+
+- name: start nginx server
+  service: name=nginx state=started

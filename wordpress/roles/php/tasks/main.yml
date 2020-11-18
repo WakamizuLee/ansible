@@ -1,0 +1,22 @@
+---
+- name: install php
+  yum: name={{ item.name }}  state=present
+  with_items:
+    - { name: 'epel-release' }
+    - { name: 'https://mirror.webtatic.com/yum/el7/webtatic-release.rpm' }
+    - { name: 'php71w' }
+    - { name: 'php71w-fpm' }
+    - { name: 'php71w-mbstring' }
+    - { name: 'php71w-common' }
+    - { name: 'php71w-gd' }
+    - { name: 'php71w-mcrypt' }
+    - { name: 'php71w-mysql' }
+    - { name: 'php71w-xml' }
+    - { name: 'php71w-cli' }
+    - { name: 'php71w-devel' }
+    - { name: 'php71w-pecl-memcached' }
+    - { name: 'php71w-pecl-redis' }
+    - { name: 'php71w-opcache' }
+
+- name: start php-fpm
+  service: name=php-fpm state=started
